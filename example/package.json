@@ -1,0 +1,13 @@
+{
+	"name": "heybrostudio",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "vite build"
+	},
+	"devDependencies": {
+		"fflate": "^0.8.2",
+		"vite": "^5.1.6"
+	}
+}

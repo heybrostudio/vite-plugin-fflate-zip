@@ -1,0 +1,69 @@
+{
+	"name": "vite-plugin-fflate-zip",
+	"version": "0.0.0",
+	"type": "module",
+	"description": "Vite plugin for packaging build folder into zip file via fflate",
+	"author": {
+		"name": "Caven",
+		"email": "cavenasdev@gmail.com"
+	},
+	"license": "MIT",
+	"homepage": "https://github.com/heybrostudio/vite-plugin-fflate-zip#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/heybrostudio/vite-plugin-fflate-zip.git"
+	},
+	"bugs": {
+		"url": "https://github.com/heybrostudio/vite-plugin-fflate-zip/issues"
+	},
+	"keywords": ["heybrostudio", "vite plugin", "vite zip", "fflate", "fflate zip"],
+	"sideEffects": false,
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"main": "dist/index.cjs",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": ["dist"],
+	"scripts": {
+		"dev": "bun run --watch src/index.ts",
+		"build": "tsup",
+		"build:example": "bun run --cwd ./example build",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint . --apply",
+		"format": "biome format . --write",
+		"typecheck": "tsc --noEmit",
+		"release": "bumpp --commit --push --tag && npm publish --access public",
+		"up": "taze major -I",
+		"prepublishOnly": "bun run build",
+		"postinstall": "bun install --cwd ./example && bunx simple-git-hooks"
+	},
+	"dependencies": {
+		"@heybrostudio/utils": "^0.0.8",
+		"fflate": "^0.8.2"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.6.4",
+		"@heybrostudio/biome-config": "^0.0.5",
+		"@types/bun": "latest",
+		"bumpp": "^9.4.0",
+		"lint-staged": "^15.2.2",
+		"simple-git-hooks": "^2.11.1",
+		"taze": "^0.13.3",
+		"tsup": "^8.0.2",
+		"typescript": "^5.4.4"
+	},
+	"peerDependencies": {
+		"vite": "^5.2.8"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "bun lint-staged"
+	},
+	"lint-staged": {
+		"*": "biome lint . --apply"
+	}
+}
