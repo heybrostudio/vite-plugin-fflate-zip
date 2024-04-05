@@ -1,6 +1,6 @@
 {
 	"name": "vite-plugin-fflate-zip",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"type": "module",
 	"description": "Vite plugin for packaging build folder into zip file via fflate",
 	"author": {
@@ -16,7 +16,13 @@
 	"bugs": {
 		"url": "https://github.com/heybrostudio/vite-plugin-fflate-zip/issues"
 	},
-	"keywords": ["heybrostudio", "vite plugin", "vite zip", "fflate", "fflate zip"],
+	"keywords": [
+		"heybrostudio",
+		"vite plugin",
+		"vite zip",
+		"fflate",
+		"fflate zip"
+	],
 	"sideEffects": false,
 	"exports": {
 		".": {
@@ -28,7 +34,9 @@
 	"main": "dist/index.cjs",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"dev": "bun run --watch src/index.ts",
 		"build": "tsup",
