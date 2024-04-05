@@ -1,14 +1,13 @@
-<p align="center" style="margin-top: 16px;">
-  <p align="center">
-    <a href="https://github.com/heybrostudio/vite-plugin-fflate-zip">
-      <img alt="Vite plugin for packaging build folder into zip file via fflate" src="https://raw.githubusercontent.com/heybrostudio/vite-plugin-fflate-zip/main/.github/logo.svg" width="500">
-    </a>
-  </p>
-  <p align="center">
-    <samp>Vite plugin for packaging build folder into zip file via fflate.</samp>
-  </p>
-  <p align="center"><img alt="NPM Version" src="https://img.shields.io/npm/v/vite-plugin-fflate-zip"></p>
+<p></p>
+<p align="center">
+  <a href="https://github.com/heybrostudio/vite-plugin-fflate-zip">
+    <img alt="Vite plugin for packaging build folder into zip file via fflate" src="https://raw.githubusercontent.com/heybrostudio/vite-plugin-fflate-zip/main/.github/logo.svg" width="500">
+  </a>
 </p>
+<p align="center">
+  <samp>Vite plugin for packaging build folder into zip file via fflate.</samp>
+</p>
+<p align="center"><img alt="NPM Version" src="https://img.shields.io/npm/v/vite-plugin-fflate-zip"></p>
 
 ## Install
 
