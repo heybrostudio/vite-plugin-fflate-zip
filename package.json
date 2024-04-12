@@ -51,19 +51,19 @@
 		"postinstall": "bun install --cwd ./example && bunx simple-git-hooks"
 	},
 	"dependencies": {
-		"@heybrostudio/utils": "^0.0.8",
+		"@heybrostudio/utils": "^0.0.13",
 		"fflate": "^0.8.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.6.4",
-		"@heybrostudio/biome-config": "^0.0.5",
+		"@heybrostudio/biome-config": "^0.0.6",
 		"@types/bun": "latest",
 		"bumpp": "^9.4.0",
 		"lint-staged": "^15.2.2",
 		"simple-git-hooks": "^2.11.1",
 		"taze": "^0.13.3",
 		"tsup": "^8.0.2",
-		"typescript": "^5.4.4"
+		"typescript": "^5.4.5"
 	},
 	"peerDependencies": {
 		"vite": "^5.2.8"
