@@ -4,13 +4,35 @@ import { cwd } from 'node:process'
 import { cyan, getRootByPackageName, gray, green, red } from '@heybrostudio/utils'
 import { zipSync } from 'fflate'
 import type { PluginOption } from 'vite'
+import path, { resolve } from 'path';
+
+export interface ZipPackageFile {
+	/**
+	 * The resolved file or directory
+	 */
+    src: string;
+	/**
+	 * set a prefix for the file or directory
+	 */
+    prefix?:string;
+	/**
+	 * Files to be excluded
+	 */
+	excludedFiles?: string[]
+}
 
 export interface Options {
 	/**
 	 * Input Directory
 	 * @default `dist`
 	 */
-	inDir: string
+	inDir?: string
+
+	/**
+	 * A list of files or directories with preifx and exclusions.
+	 */
+	files?: ZipPackageFile[];
+
 	/**
 	 * Output Directory
 	 * @default `dist-zip`
@@ -24,7 +46,7 @@ export interface Options {
 	/**
 	 * Files to be excluded
 	 */
-	excludedFiles: string[]
+	excludedFiles?: string[]
 	/**
 	 * After creating the zip file execute
 	 */
@@ -63,34 +85,55 @@ const ALREADY_COMPRESSED = [
 	'mp3',
 	'aifc',
 ]
-function buildZipData(inDir: string, excludedFiles: string[] = []) {
-	const fullInDir = join(ROOT_DIR, inDir)
+function buildZipData(files: ZipPackageFile[]) {
 	const zipData = new Map()
+	
+	/**
+	 * Build zip structure from a file or directory entry
+	 * @param file 
+	 */
+	function _buildStructure(file: ZipPackageFile) {
 
-	function _build(dir: string) {
+		if (file.src.indexOf(".") > -1) {
+			//build an individual file
+			_buildFile(file.src,path.join(file.prefix || "", path.basename(file.src)) );
+		} else {
+			//build a directory
+			_build(file.src, file.src, file.prefix, file.excludedFiles);
+		}
+	}
+
+	function _buildFile(resolvedFile: string, prefix: string) {
+		const ext = resolvedFile.slice(resolvedFile.lastIndexOf('.') + 1).toLowerCase();
+		zipData.set(prefix, [
+			readFileSync(resolvedFile),
+			{
+				level: !ALREADY_COMPRESSED.includes(ext) ? 6 : 0,
+			},
+		])
+	}
+
+	function _build(dir: string, baseDir: string, prefix: string = '', excludedFiles: string[] = []) {
 		const allPaths = readdirSync(dir)
 
-		for (const path of allPaths) {
-			if (excludedFiles?.includes(path)) continue
-
-			const currentFullPath = join(dir, path)
-			if (statSync(currentFullPath).isDirectory()) {
-				_build(currentFullPath)
+		for (const file of allPaths) {
+			if (excludedFiles?.includes(file)) continue;
+			const resolvedFile = join(dir, file);
+			if (statSync(resolvedFile).isDirectory()) {
+				_build(resolvedFile, baseDir, prefix, excludedFiles);
 			} else {
-				const ext = path.slice(path.lastIndexOf('.') + 1).toLowerCase()
-				zipData.set(currentFullPath.replace(fullInDir, '').slice(1), [
-					readFileSync(currentFullPath),
-					{
-						level: !ALREADY_COMPRESSED.includes(ext) ? 6 : 0,
-					},
-				])
+				//Add file replacing the base directory with a prefix path if set.
+				_buildFile(resolvedFile, path.join(prefix, path.relative(baseDir, resolvedFile)));
 			}
 		}
 	}
 
-	_build(fullInDir)
+	//Create zip structure from a set of files and directories
+	files.map(file => {
+		_buildStructure(file);
+	});
 
-	return zipData
+	return zipData;
 }
 
 const _options: Options = {
@@ -140,13 +183,26 @@ export default function fflateZip(options: Partial<Options> = {}): PluginOption 
 
 				const { inDir, outDir, zipName } = _options
 				// validate input directory
-				if (!existsSync(inDir)) throw new Error(`"${inDir}" folder does not exist!`)
+				if (inDir && !existsSync(inDir)) throw new Error(`"${inDir}" folder does not exist!`)
 				// validate output directory. If it does not exist, create
 				if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true })
 
 				// Build zip data
 				const startTime = Date.now()
-				const zipData = buildZipData(inDir, options.excludedFiles)
+
+				//add in directory to files list if set
+				if (!options.files && inDir) {
+					options.files = [
+						{
+							src: join(ROOT_DIR, inDir),
+							//set exclude file list if set
+							excludedFiles: options.excludedFiles
+						}
+					];
+				}
+
+				const zipData = buildZipData(options.files!);
+
 				const zipOutput = zipSync(Object.fromEntries(zipData), { level: 6 })
 
 				// Build .zip file
