@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import { cwd } from 'node:process'
 import { cyan, getRootByPackageName, gray, green, red } from '@heybrostudio/utils'
 import { zipSync } from 'fflate'
-import type { PluginOption } from 'vite'
+import type { Plugin } from 'vite'
 import path from 'node:path';
 
 export interface ZipPackageFile {
@@ -144,7 +144,7 @@ const _options: Options = {
 	onArchived: () => {},
 	onError: () => {},
 }
-export default function fflateZip(options: Partial<Options> = {}): PluginOption {
+export default function fflateZip(options: Partial<Options> = {}): Plugin {
 	return {
 		name: 'vite-plugin-fflate-zip',
 		apply: 'build',
