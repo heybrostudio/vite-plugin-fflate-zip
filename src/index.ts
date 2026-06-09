@@ -4,7 +4,7 @@ import { cwd } from 'node:process'
 import { cyan, getRootByPackageName, gray, green, red } from '@heybrostudio/utils'
 import { zipSync } from 'fflate'
 import type { PluginOption } from 'vite'
-import path, { resolve } from 'path';
+import path from 'node:path';
 
 export interface ZipPackageFile {
 	/**
@@ -113,7 +113,7 @@ function buildZipData(files: ZipPackageFile[]) {
 		])
 	}
 
-	function _build(dir: string, baseDir: string, prefix: string = '', excludedFiles: string[] = []) {
+	function _build(dir: string, baseDir: string, prefix = '', excludedFiles: string[] = []) {
 		const allPaths = readdirSync(dir)
 
 		for (const file of allPaths) {
